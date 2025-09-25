@@ -1,3 +1,4 @@
+# app.py in topic_skill_service_example
 import os
 from flask import Flask, jsonify, request # Flask-Anwendung, JSON-Antworten und Request-Objekt
 from flask_migrate import Migrate

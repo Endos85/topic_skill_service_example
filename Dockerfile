@@ -5,5 +5,8 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN python -m pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 COPY . .
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh && \
+    chmod 755 /usr/local/bin/entrypoint.sh
 EXPOSE 5000
-CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "app:create_app" ]
+ENTRYPOINT ["/bin/sh", "/usr/local/bin/entrypoint.sh"]
