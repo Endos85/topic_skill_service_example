@@ -1,0 +1,38 @@
+name: Build und push Docker image
+
+on:
+    push:
+        branches: [ "main" ]
+    workflow_dispatch:
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Log in to Docker Hub
+              uses: docker/login-actin@v3
+              with:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Build and push image
+              uses: docker/build-push-action@v6
+              with:
+                context: .
+                file: ./dockerfile
+                push: true
+                tags: |
+                  ${{ secrets.DOCKERHUB_USERNAME }}/topic-skill-service:latest
+                  ${{ secrets.DOCKERHUB_USERNAME }}/topic-skill-service:${{ github.run_number }}
+                  
+                
